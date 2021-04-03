@@ -13,6 +13,7 @@
             <router-link to="/dashboard" class="navbar-item"
               >ダッシュボード</router-link
             >
+            <router-link to="/dashboard/clients" class="navbar-item">クライアント</router-link>
 
             <div class="navbar-item">
               <div class="buttons">
