@@ -60,7 +60,7 @@
       </div>
 
       <div class="column is-6">
-          <div class="field">
+        <div class="field">
           <label>Zipcode</label>
 
           <div class="control">
@@ -101,11 +101,11 @@
       </div>
 
       <div class="column is-12">
-          <div class="field">
-              <div class="control">
-                  <button class="button is-success" @click="submitForm">送信</button>
-              </div>
+        <div class="field">
+          <div class="control">
+            <button class="button is-success" @click="submitForm">送信</button>
           </div>
+        </div>
       </div>
     </div>
   </div>
@@ -113,6 +113,7 @@
 
 <script>
 import axios from "axios";
+import { toast } from "bulma-toast";
 
 export default {
   name: "AddClient",
@@ -122,16 +123,24 @@ export default {
     };
   },
   methods: {
-      submitForm() {
-          axios
-              .post("api/v1/clients/", this.client)
-              .then(response => {
-                  this.$router.push('/dashboard/clients')
-              })
-              .catch(error => {
-                  console.log(JSON.stringify(error))
-              })
-      }
+    submitForm() {
+      axios
+        .post("api/v1/clients/", this.client)
+        .then((response) => {
+          toast({
+            message: "クライアント追加",
+            type: "is-success",
+            dismissible: true,
+            pauseOnHover: true,
+            duration: 3000,
+            position: "bottom-right",
+          });
+          this.$router.push("/dashboard/clients");
+        })
+        .catch((error) => {
+          console.log(JSON.stringify(error));
+        });
+    },
   },
 };
 </script>

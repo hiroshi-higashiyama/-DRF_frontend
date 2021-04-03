@@ -2,7 +2,10 @@
   <div class="page-my-account">
     <h1 class="title">アカウント</h1>
 
-    <button @click="logout()" class="button is-danger">ログアウト</button>
+    <div class="buttons">
+      <router-link to="/dashboard/my-account/edit-team" class="button is-light">チーム編集</router-link>
+      <button @click="logout()" class="button is-danger">ログアウト</button>
+    </div>
   </div>
 </template>
 
