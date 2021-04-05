@@ -9,20 +9,21 @@
 
       <div class="navbar-menu">
         <div class="navbar-end">
-          <template v-if="$store.state.isAuthenticated">
+          <!-- <template v-if="$store.state.isAuthenticated"> -->
             <router-link to="/dashboard" class="navbar-item"
               >ダッシュボード</router-link
             >
             <router-link to="/dashboard/clients" class="navbar-item">クライアント</router-link>
+            <router-link to="/dashboard/invoices" class="navbar-item">請求書</router-link>
 
             <div class="navbar-item">
               <div class="buttons">
                 <router-link to="/dashboard/my-account" class="button is-light">アカウント</router-link>
               </div>
             </div>
-          </template>
+          <!-- </template> -->
 
-          <template v-else>
+          <!-- <template v-else> -->
             <router-link to="/" class="navbar-item">Home</router-link>
 
             <div class="navbar-item">
@@ -31,7 +32,7 @@
                 <router-link to="/log-in" class="button is-light">ログイン</router-link>
               </div>
             </div>
-          </template>
+          <!-- </template> -->
         </div>
       </div>
     </nav>
