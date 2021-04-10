@@ -25,15 +25,13 @@
         <table class="table is-fullwidth">
           <thead>
             <tr>
-              <td>#</td>
               <td>商品名</td>
               <td>数量</td>
               <td>金額</td>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="item in items" v-bind:key="item.id">
-              <td>{{ item.id }}</td>
+            <tr v-for="item in invoice.items" v-bind:key="item.id">
               <td>{{ item.title }}</td>
               <td>{{ item.quantity }}</td>
               <td>{{ item.net_amount }}</td>
@@ -56,9 +54,8 @@ export default {
       items: [],
     };
   },
-  async mounted() {
-    await this.getInvoice();
-    await this.getItems();
+  mounted() {
+    this.getInvoice();
   },
   methods: {
     getInvoice() {
@@ -73,19 +70,7 @@ export default {
         .catch((error) => {
           console.log(JSON.stringify(error));
         });
-    },
-    getItems() {
-      const invoiceID = this.$route.params.id;
-
-      axios
-        .get(`/api/v1/items/?invoice_id=${invoiceID}`)
-        .then((respnse) => {
-          this.items = respnse.data;
-        })
-        .catch((error) => {
-          console.log(JSON.stringify(error));
-        });
-    },
+    }
   },
 };
 </script>

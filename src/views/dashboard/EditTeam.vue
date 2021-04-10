@@ -31,6 +31,17 @@
           </div>
         </div>
 
+         <div class="field">
+          <label>Bankaccount</label>
+          <div class="control">
+            <input
+              type="text"
+              class="input"
+              v-model="team.bankaccount"
+            />
+          </div>
+        </div>
+
         <div class="field">
           <div class="control">
             <button class="button is-success" @click="submitFrom">保存</button>
