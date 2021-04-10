@@ -18,6 +18,7 @@
 
             <div class="navbar-item">
               <div class="buttons">
+                <router-link to="/dashboard/invoices/add" class="button is-success">請求書・追加</router-link>
                 <router-link to="/dashboard/my-account" class="button is-light">アカウント</router-link>
               </div>
             </div>
