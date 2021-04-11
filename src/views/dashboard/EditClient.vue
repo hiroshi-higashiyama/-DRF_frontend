@@ -1,5 +1,24 @@
 <template>
   <div class="page-add-client">
+    <nav class="breadcrumb" aria-label="breadcrumbs">
+      <ul>
+        <li><router-link to="/dashboard">ダッシュボード</router-link></li>
+        <li><router-link to="/dashboard/clients">クライアント</router-link></li>
+        <li>
+          <router-link :to="{ name: 'Client', params: { id: client.id } }">{{
+            client.name
+          }}</router-link>
+        </li>
+        <li class="is-active">
+          <router-link
+            :to="{ name: 'EditClient', params: { id: client.id } }"
+            aria-current="true"
+            >編集</router-link
+          >
+        </li>
+      </ul>
+    </nav>
+
     <div class="columns is-multiline">
       <div class="column is-12">
         <h1 class="title">編集 - {{ client.name }}</h1>
@@ -103,9 +122,7 @@
       <div class="column is-12">
         <div class="field">
           <div class="control">
-            <button class="button is-success" @click="submitForm">
-              変更
-            </button>
+            <button class="button is-success" @click="submitForm">変更</button>
           </div>
         </div>
       </div>
@@ -125,7 +142,7 @@ export default {
     };
   },
   mounted() {
-      this.getClient()
+    this.getClient();
   },
   methods: {
     getClient() {
@@ -154,7 +171,7 @@ export default {
             duration: 3000,
             position: "bottom-right",
           });
-          
+
           this.$router.push("/dashboard/clients");
         })
         .catch((error) => {
