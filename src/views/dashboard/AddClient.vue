@@ -1,8 +1,20 @@
 <template>
   <div class="page-add-client">
+    <nav class="breadcrumb" aria-label="breadcrumbs">
+      <ul>
+        <li><router-link to="/dashboard">ダッシュボード</router-link></li>
+        <li><router-link to="/dashboard/clients">クライアント</router-link></li>
+        <li class="is-active">
+          <router-link to="/dashboard/clients/add" aria-current="true"
+            >クライアント・追加</router-link
+          >
+        </li>
+      </ul>
+    </nav>
+
     <div class="columns is-multiline">
       <div class="column is-12">
-        <h1 class="title">クライアント追加</h1>
+        <h1 class="title">クライアント・追加</h1>
       </div>
 
       <div class="column is-6">
