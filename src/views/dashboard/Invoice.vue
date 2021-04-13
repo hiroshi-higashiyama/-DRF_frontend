@@ -20,12 +20,30 @@
 
         <div class="buttons">
           <button @click="getPdf()" class="button is-dark">Download PDF</button>
+
+          <template v-if="!invoice.is_credit_for && !invoice.is_credited">
+            <button
+              @click="setAsPaid()"
+              class="button is-success"
+              v-if="!invoice.is_paid"
+            >
+              支払完了
+            </button>
+            <button
+              @click="createCreditNote()"
+              class="button is-danger"
+              v-if="!invoice.is_paid"
+            >
+              クレジットノート作成
+            </button>
+          </template>
+
           <button
-            @click="setAsPaid()"
-            class="button is-success"
-            v-if="!invoice.is_paid"
+            @click="sendReminder()"
+            class="button is-info"
+            v-if="!invoice.is_paid && !invoice.is_credit_for"
           >
-            支払完了
+            リマインダー送信
           </button>
         </div>
       </div>
@@ -56,7 +74,7 @@
                 <th>商品名</th>
                 <th>数量</th>
                 <th>消費税</th>
-                <th>合計金額</th>
+                <th>金額</th>
               </tr>
             </thead>
             <tbody>
@@ -79,7 +97,7 @@
             <div class="column is-6">
               <p><strong>金額</strong>: {{ invoice.net_amount }}</p>
               <p><strong>消費税</strong>: {{ invoice.vat_amount }}</p>
-              <p><strong>総額</strong>: {{ invoice.gross_amount }}</p>
+              <p><strong>税込金額</strong>: {{ invoice.gross_amount }}</p>
               <p><strong>銀行口座</strong>: {{ invoice.bankaccount }}</p>
             </div>
 
@@ -163,7 +181,7 @@ export default {
       const unit_price = item.unit_price;
       const quantity = item.quantity;
       const total = item.net_amount + item.net_amount * (item.vat_rate / 100);
-      return parseFloat(total).toFixed(2);
+      return parseFloat(total).toFixed(0);
     },
     async setAsPaid() {
       this.invoice.is_paid = true;
@@ -187,7 +205,70 @@ export default {
         .catch((error) => {
           console.log(JSON.stringify(error));
         });
-        this.invoice.items = items;
+      this.invoice.items = items;
+    },
+    async createCreditNote() {
+      this.invoice.is_credited = true;
+      let items = this.invoice.items;
+      delete this.invoice["items"];
+
+      await axios
+        .patch(`/api/v1/invoices/${this.invoice.id}/`, this.invoice)
+        .then((response) => {
+          toast({
+            message: "変更内容を保存",
+            type: "is-success",
+            dismissible: true,
+            pauseOnHover: true,
+            duration: 3000,
+            position: "bottom-right",
+          });
+        })
+        .catch((error) => {
+          console.log(JSON.stringify(error));
+        });
+
+      this.invoice.items = items;
+
+      let creditNote = this.invoice;
+      creditNote.is_credit_for = this.invoice.id;
+      creditNote.is_credited = false;
+      creditNote.invoice_type = "credit_note";
+
+      delete creditNote["id"];
+      await axios
+        .post("api/v1/invoices/", creditNote)
+        .then((response) => {
+          toast({
+            message: "クレジットノートを作成しました。",
+            type: "is-success",
+            dismissible: true,
+            pauseOnHover: true,
+            duration: 3000,
+            position: "bottom-right",
+          });
+          this.$router.push("/dashboard/invoices");
+        })
+        .catch((error) => {
+          console.log(JSON.stringify(error));
+        });
+    },
+    sendReminder() {
+      axios
+        .get(`/api/v1/invoices/${this.invoice.id}/send_reminder/`)
+        .then((response) => {
+          toast({
+            message: "リマインダーを送信しました。",
+            type: "is-success",
+            dismissible: true,
+            pauseOnHover: true,
+            duration: 3000,
+            position: "bottom-right",
+          });
+        })
+        .catch((error) => {
+          console.log(JSON.stringify(error));
+        });
     },
   },
 };
